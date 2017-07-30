@@ -3,10 +3,15 @@
   "name": "ReCaptcha Solver",
   "description": "This extension solves Google ReCaptcha on the opened page",
   "version": "1.0",
-
   "browser_action": {
     "default_popup": "popup.html"
   },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["libs/jquery-3.2.1.min.js", "libs/anticaptcha.js", "content.js"]
+    }
+  ],
   "permissions": [
     "activeTab",
     "https://ajax.googleapis.com/"
