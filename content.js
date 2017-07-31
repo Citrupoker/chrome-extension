@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var captchaDiv = $('[data-sitekey]');
+    var captchaDiv = $('iframe[title="recaptcha widget"]');
     var url = document.URL;
 
     chrome.storage.sync.get(['token', 'solveOnLoad'], function(items) {
@@ -26,14 +26,16 @@ function solve(token, captchaDiv, url, solveOnLoad) {
                 captchaDiv.prev('h2').addClass('notification');
             }
 
-            var recaptchaKey = captchaDiv.attr('data-sitekey');
+            var keyStart = captchaDiv.attr('src').indexOf('?k=') + 3;
+            var keyEnd = captchaDiv.attr('src').indexOf('&co=');
+            var recaptchaKey = captchaDiv.attr('src').substring(keyStart, keyEnd);
 
             getSolution(token, url, recaptchaKey, function(solution, invalidToken) {
                 if (solution) {
                     $('#g-recaptcha-response').val(solution);
                     chrome.storage.sync.get('submitAfterSolved', function(result) {
                         if (result.submitAfterSolved)
-                            $('#recaptcha-demo-submit').click();
+                            $('[type="submit"]').click();
                         else 
                             $('.notification').html('Captcha is solved. You can now submit your form.');
                     });
