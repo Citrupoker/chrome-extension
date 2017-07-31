@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    var captchaDiv = $('#recaptcha-demo');
+    var captchaDiv = $('[data-sitekey]');
     var url = document.URL;
 
     chrome.storage.sync.get(['token', 'solveOnLoad'], function(items) {
