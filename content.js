@@ -3,7 +3,7 @@ $(document).ready(function() {
     var url = document.URL;
 
     chrome.storage.sync.get(['token', 'solveOnLoad'], function(items) {
-        if (items.solveOnLoad && items.token) {
+        if (items.solveOnLoad) {
             solve(items.token, captchaDiv, url, items.solveOnLoad);
         }
     });
@@ -15,17 +15,17 @@ $(document).ready(function() {
 });
 
 function solve(token, captchaDiv, url, solveOnLoad) {
-    if (token) {
-        // Add an alert above the captcha div to let the user know their solution is on its way
-        if ($('.notification').length > 0) {
-            $('.notification').html('Captcha being solved. Please wait.');
-        } else {
-            $('<h2 style="border:1px solid red;border-radius:5px;text-align: center;padding:6px;">Captcha being solved. Please wait.</h2>').insertBefore(captchaDiv);
-            captchaDiv.prev('h2').addClass('notification');
-        }
+    if (captchaDiv.length > 0) {
+        // If there actually is a recaptcha on the page and a token, get the solution and insert it in the appropriate textarea        
+        if (token) {
+            // Add an alert above the captcha div to let the user know their solution is on its way
+            if ($('.notification').length > 0) {
+                $('.notification').html('Captcha being solved. Please wait.');
+            } else {
+                $('<h2 style="border:1px solid red;border-radius:5px;text-align: center;padding:6px;">Captcha being solved. Please wait.</h2>').insertBefore(captchaDiv);
+                captchaDiv.prev('h2').addClass('notification');
+            }
 
-        if (captchaDiv.length > 0) {
-            // If there actually is a recaptcha on the page, get the solution and insert it in the appropriate textarea
             var recaptchaKey = captchaDiv.attr('data-sitekey');
 
             getSolution(token, url, recaptchaKey, function(solution, invalidToken) {
@@ -41,22 +41,22 @@ function solve(token, captchaDiv, url, solveOnLoad) {
                     $('.notification').html('The token you have provided is invalid. Please try again.');
                 }
             });
-        } else if (!solveOnLoad) {
+        } else {
             if ($('.notification').length > 0) {
-                // There is no recaptcha on the currently opened tab
-                $('.notification').html('Something went wrong. It looks like you\'re on the wrong page.');
+                // There is no token provided
+                $('.notification').html('Please provide a token.');
             } else {
-                $('body').prepend('<h2 style="border:1px solid red;border-radius:5px;text-align: center;padding:6px;">Something went wrong. It looks like you\'re on the wrong page.</h2>');            
-                $('h2').addClass('notification');
+                $('<h2 style="border:1px solid yellow;border-radius:5px;text-align: center;padding:6px;">Please provide a token.</h2>').insertBefore(captchaDiv);
+                captchaDiv.prev('h2').addClass('notification');
             }
         }
-    } else {
+    } else if (!solveOnLoad) {
         if ($('.notification').length > 0) {
-            // There is no token provided
-            $('.notification').html('Please provide a token.');
+            // There is no recaptcha on the currently opened tab
+            $('.notification').html('Something went wrong. It looks like you\'re on the wrong page.');
         } else {
-            $('<h2 style="border:1px solid yellow;border-radius:5px;text-align: center;padding:6px;">Please provide a token.</h2>').insertBefore(captchaDiv);
-            captchaDiv.prev('h2').addClass('notification');
+            $('body').prepend('<h2 style="border:1px solid red;border-radius:5px;text-align: center;padding:6px;">Something went wrong. It looks like you\'re on the wrong page.</h2>');            
+            $('h2').addClass('notification');
         }
     }
 }
