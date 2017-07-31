@@ -1,12 +1,19 @@
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     var captchaDiv = $('#recaptcha-demo')
-
-    // Add an alert above the captcha div to let the user know their solution is on its way
-    $('<h2>Captcha being solved. Please wait.</h2>').insertBefore(captchaDiv);
-    captchaDiv.prev('h2').addClass('notification');
-
     var token = request.token;
     var url = document.URL;
+
+    if(token){
+        // Add an alert above the captcha div to let the user know their solution is on its way
+        $('<h2 style="border:1px solid red;border-radius:5px;text-align: center;padding:6px;">Captcha being solved. Please wait.</h2>').insertBefore(captchaDiv);
+        captchaDiv.prev('h2').addClass('notification');
+    }else {
+        $('<h2 style="border:1px solid yellow;border-radius:5px;text-align: center;padding:6px;">Please provide a token</h2>').insertBefore(captchaDiv);
+        captchaDiv.prev('h2').addClass('notification');
+    }
+
+
+
 
     if (captchaDiv.length > 0) {
         // If there actually is a recaptcha on the page, get the solution and insert it in the appropriate textarea

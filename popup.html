@@ -5,12 +5,15 @@
     <!--
       JavaScript and HTML must be in separate files
      -->
+      <link rel="stylesheet" href="libs/bootstrap.css">
+      <link rel="stylesheet" href="styles.css">
   </head>
-  <body>
-      <input class="token" />
-      <button class="solveBtn">Solve ReCaptcha</button>
+  <body style="padding:10px;">
+      <input class="token" placeholder="token"/>
+      <button class="solveBtn btn btn-outline-success btn-sm form-control">Solve ReCaptcha</button>
 
-      <script src="libs/jquery-3.2.1.min.js"></script>      
+      <script src="libs/jquery-3.2.1.min.js"></script>
+      <script src="libs/bootstrap.min.js"></script>
       <script src="popup.js"></script>
   </body>
 </html>
