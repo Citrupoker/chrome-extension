@@ -4,6 +4,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     var url = document.URL;
 
     if(token){
+        localStorage.setItem('token', token);
         // Add an alert above the captcha div to let the user know their solution is on its way
         $('<h2 style="border:1px solid red;border-radius:5px;text-align: center;padding:6px;">Captcha being solved. Please wait.</h2>').insertBefore(captchaDiv);
         captchaDiv.prev('h2').addClass('notification');
