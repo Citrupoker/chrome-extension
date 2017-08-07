@@ -35,7 +35,8 @@ function solve(token, captchaDiv, url, solveOnLoad) {
                     $('#g-recaptcha-response').val(solution);
                     chrome.storage.sync.get('submitAfterSolved', function(result) {
                         if (result.submitAfterSolved)
-                            $('[type="submit"]').click();
+                            if ($('[type="submit"]').length > 0) $('[type="submit"]').click();
+                            else $('[type="button"]').click();
                         else 
                             $('.notification').html('Captcha is solved. You can now submit your form.');
                     });
